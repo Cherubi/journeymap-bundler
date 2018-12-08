@@ -1,0 +1,46 @@
+.palanen {
+	width:512;
+	height:512;
+	position:relative;
+}
+
+.kuva {
+	z-index:80;
+	position:absolute;
+}
+
+.paikka {
+	z-index:100;
+	position:absolute;
+	color:black;
+	font-size:12px;
+	font-weight:bold;
+	background-color:rgba(255,255,255,0.15)
+}
+
+#toolsContainer {
+	position:fixed;
+	top:5px;
+	right:5px;
+	border:1px solid #4C4646;
+	background:black;
+	z-index:110;
+}
+
+body {
+	background-color:gray;
+}
+
+table {
+	border-collapse:initial;
+}
+
+td {
+	padding:0px;
+}
+
+.mini {
+	color:#2F4F4F;
+	font-family:"Trebuchet MS", Helvetica, sans-serif;
+	font-size:10px;
+}

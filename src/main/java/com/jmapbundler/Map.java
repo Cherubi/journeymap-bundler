@@ -1,11 +1,13 @@
 package com.jmapbundler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
-
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.FileNotFoundException;
 
 import javax.swing.JOptionPane;
@@ -416,74 +418,30 @@ public class Map {
 			} catch (Exception e) {}
 		}
 	}
-	
-	private static void kirjoitaCSS(FileWriter kirjuri) throws Exception {
-		kirjuri.append(".palanen" + "\n");
-		kirjuri.append("{" + "\n");
-		kirjuri.append("width:512;" + "\n");
-		kirjuri.append("height:512;" + "\n");
-		kirjuri.append("position:relative;" + "\n");
-		kirjuri.append("}" + "\n\n");
-		
-		kirjuri.append(".kuva" + "\n");
-		kirjuri.append("{" + "\n");
-		kirjuri.append("z-index:80;" + "\n");
-		kirjuri.append("position:absolute;" + "\n");
-		kirjuri.append("}" + "\n\n");
-		
-		kirjuri.append(".paikka" + "\n");
-		kirjuri.append("{" + "\n");
-		kirjuri.append("z-index:100;" + "\n");
-		kirjuri.append("position:absolute;" + "\n");
-		kirjuri.append("color:black;" + "\n");
-		kirjuri.append("font-size:12px;" + "\n");
-		kirjuri.append("font-weight:bold;" + "\n");
-		//kirjuri.append("left:240;" + "\n");
-		//kirjuri.append("top:80;" + "\n");
-		kirjuri.append("background-color:rgba(255,255,255,0.15)" + "\n");
-		kirjuri.append("}" + "\n\n");
-		
-		kirjoitaNappulamuotoilu(kirjuri);
-		kirjoitaSivumuotoilu(kirjuri);
+
+	private static void kirjoitaCSS(FileWriter writer) throws Exception {
+		InputStream cssStream = null;
+		Scanner streamScanner = null;
+		try {
+			cssStream = Map.class.getResourceAsStream("/map.css");
+			streamScanner = new Scanner(cssStream).useDelimiter("\\A");
+			if (streamScanner.hasNext()) {
+				String cssData = streamScanner.next();
+				List<String> lines = Arrays.asList(cssData.split("\n"));
+				for (String line : lines) {
+					writer.append(line + "\n");
+				}
+			}
+		} finally {
+			if (streamScanner != null) {
+				streamScanner.close();
+			}
+			if (cssStream != null) {
+				cssStream.close();
+			}
+		}
 	}
-	
-	private static void kirjoitaNappulamuotoilu(FileWriter kirjuri) throws Exception {
-		kirjuri.append("#toolsContainer\n");
-		kirjuri.append("{\n");
-		kirjuri.append("position:fixed;\n");
-		kirjuri.append("top:5px;\n");
-		kirjuri.append("right:5px;\n");
-		kirjuri.append("border:1px solid #4C4646;\n");
-		kirjuri.append("background:black;\n");
-		kirjuri.append("z-index:110;\n");
-		kirjuri.append("h");
-		kirjuri.append("}\n\n");
-	}
-	
-	private static void kirjoitaSivumuotoilu(FileWriter kirjuri) throws Exception {
-		kirjuri.append("body\n");
-		kirjuri.append("{\n");
-		kirjuri.append("background-color:gray;\n");
-		kirjuri.append("}\n\n");
-		
-		kirjuri.append("table\n");
-		kirjuri.append("{\n");
-		kirjuri.append("border-collapse:initial;\n");
-		kirjuri.append("}\n\n");
-		
-		kirjuri.append("td\n");
-		kirjuri.append("{\n");
-		kirjuri.append("padding:0px;\n");
-		kirjuri.append("}\n\n");
-		
-		kirjuri.append(".mini" + "\n");
-		kirjuri.append("{" + "\n");
-		kirjuri.append("color:#2F4F4F;" + "\n");
-		kirjuri.append("font-family:\"Trebuchet MS\", Helvetica, sans-serif;" + "\n");
-		kirjuri.append("font-size:10px;" + "\n");
-		kirjuri.append("}" + "\n");
-	}
-	
+
 	private static void luoJavaskripti() {
 		ScriptWriter scriptWriter = new ScriptWriter("mapFunctions.js");
 		
