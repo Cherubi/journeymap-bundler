@@ -1,3 +1,5 @@
+package com.jmapbundler;
+
 import java.io.File;
 
 public class FileExpert {
