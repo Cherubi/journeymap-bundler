@@ -1,9 +1,7 @@
 package com.jmapbundler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
@@ -427,10 +425,7 @@ public class Map {
 			streamScanner = new Scanner(cssStream).useDelimiter("\\A");
 			if (streamScanner.hasNext()) {
 				String cssData = streamScanner.next();
-				List<String> lines = Arrays.asList(cssData.split("\n"));
-				for (String line : lines) {
-					writer.append(line + "\n");
-				}
+				writer.append(cssData);
 			}
 		} finally {
 			if (streamScanner != null) {
