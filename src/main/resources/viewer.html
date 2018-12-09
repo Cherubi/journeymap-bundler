@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Map viewer</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="map.css" type="text/css" media="screen, print" />
+		<script type="text/javascript" src="mapFunctions.js"></script>
+		<script src="images.js"></script>
+		<script type="text/javascript">
+			function getMapNames() {
+				const names = {};
+				images.forEach((image) => names[image.name] = true);
+				return Object.keys(names);
+			}
+			function writeMap(name) {
+				const selectedImages = images.filter((image) => image.name == name);
+				const xValues = selectedImages.map((image) => image.x);
+				const yValues = selectedImages.map((image) => image.y);
+				const [minX, minY] = [xValues, yValues].map((v) => Math.min(...v));
+				const [maxX, maxY] = [xValues, yValues].map((v) => Math.max(...v));
+
+				let innerHTML = '<table>';
+				for (let y = minY; y <= maxY; y += 1) {
+					innerHTML += '<tr>'
+					for (let x = minX; x <= maxX; x += 1) {
+						const hasImage = selectedImages.some((image) => image.x == x && image.y == y);
+						innerHTML += '<td ' +
+								(hasImage ? 'background="./MapMerge/' + name + '/MergeMap/' + x + ',' + y + '.png" ' : '') +
+								'style="background-repeat:no-repeat;background-position: center center">' +
+								'<div class="palanen" onmousemove="getPos(event,this,\' ' + x + ' ' + y + '\')" onmouseout="stopTracking()">' +
+								'<p class="paikka prio 1" style="left:0;top:0">[' + x + ',' + y + ']</p>' +
+								'</div>' +
+								'</td>';
+					}
+					innerHTML += '</tr>'
+				}
+				innerHTML += '</table>';
+
+				const container = document.getElementById('mapContainer');
+				container.innerHTML = innerHTML;
+			}
+		</script>
+	</head>
+	<body onload="writeMap(getMapNames()[0])">
+		<div id="toolsContainer">
+			<input type="button" value="Toggle grid" onclick="ToggleGrid()"/>
+			<br />
+			<input type="button" value="Go to origo" onclick="Origo()"/>
+			<br />
+			<input type="button" value="Toggle prio" onclick="toggleVisibility()"/>
+			<br />
+			<input type="button" value="Reload" onclick="forceReload()"/>
+			<p id="cursor" style="font-size:10px; color:white"></p>
+		</div>
+		<div id="mapContainer"></div>
+	</body>
+</html>

@@ -6,26 +6,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-public class ScriptWriter extends FileExpert {
+public class ResourceWriter extends FileExpert {
 
-	private final String scriptName;
+	private final String fileName;
 
-	public ScriptWriter(String scriptName) {
-		this.scriptName = scriptName;
+	public ResourceWriter(String scriptName) {
+		this.fileName = scriptName;
 	}
 
-	public void writeScriptFile() {
-		File js = new File(scriptName);
+	public void copyResourceFile() {
+		File file = new File(fileName);
 		try {
-			this.removeFile(js);
-			FileWriter kirjuri = this.addResource(new FileWriter(js));
-			kirjuri.append(this.getScriptFileContent("mapFunctions.js"));
+			this.removeFile(file);
+			FileWriter kirjuri = this.addResource(new FileWriter(file));
+			kirjuri.append(this.getScriptFileContent(fileName));
 		} catch (Exception e) {
-			System.out.println("FileWriter failed while writing mapFunctions.js");
+			System.out.println("Failed to copy resource " + fileName);
 		} finally {
 			try {
 				closeAllResources();
-				js.setReadable(true, false);
+				file.setReadable(true, false);
 			} catch (Exception e) {}
 		}
 	}

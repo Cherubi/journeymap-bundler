@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.FileNotFoundException;
 
 import javax.swing.JOptionPane;
+
+import com.jmapbundler.catalog.ImageCatalog;
 
 public class Map {
 	private static ArrayList<String> maailmat = new ArrayList<String>();
@@ -23,6 +26,8 @@ public class Map {
 	
 	private static int x0=0, x1=0, y0=0, y1=0;
 	private static HashMap<String, ArrayList<String>> paikat;
+
+	private final static ImageCatalog imageCatalog = new ImageCatalog();
 	
 	public static void main(String[] args) {
 		MapMerger karttapiirturi = new MapMerger();
@@ -61,6 +66,8 @@ public class Map {
 			luoKoostesivu();
 			luoIndexsivu();
 		}
+		luoKatselija();
+		luoKatalogi();
 	}
 	
 	private static void etsiPohjatiedot() {
@@ -338,6 +345,7 @@ public class Map {
 			for (int x=x0; x<=x1; x++) {
 				kirjuri.append("<td ");
 				if ((new File("MapMerge/" + maailma + "/MergeMap/" + x + "," + y + ".png")).isFile()) {
+					imageCatalog.addImage(maailma, x, y);
 					kirjuri.append("background=\"" + "MapMerge/" + maailma + "/MergeMap/" + x + "," + y + ".png\" ");
 				}
 				kirjuri.append( "style=\"background-repeat:no-repeat;" + "background-position: center center\">" + "\n");
@@ -400,49 +408,37 @@ public class Map {
 	}
 	
 	private static void luoCSS() {
+		new ResourceWriter("map.css").copyResourceFile();
+	}
+
+	private static void luoJavaskripti() {
+		new ResourceWriter("mapFunctions.js").copyResourceFile();
+	}
+
+	private static void luoKatselija() {
+		new ResourceWriter("viewer.html").copyResourceFile();
+	}
+
+	private static void luoKatalogi() {
+		final String images = imageCatalog.toJSON();
+
 		FileWriter kirjuri = null;
-		File css = new File("map.css");
+		File katalogisivu = new File("images.js");
 		try {
-			poistaTiedosto(css);
-			
-			kirjuri = new FileWriter(css);
-			kirjoitaCSS(kirjuri);
-		} catch (Exception e) {
-			System.out.println("FileWriter failed while writing map.css");
+			poistaTiedosto(katalogisivu);
+
+			kirjuri = new FileWriter(katalogisivu);
+			kirjuri.append("var images = " + images + ";\n");
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
 			try {
 				kirjuri.close();
-				css.setReadable(true, false);
+				katalogisivu.setReadable(true, false);
 			} catch (Exception e) {}
 		}
 	}
 
-	private static void kirjoitaCSS(FileWriter writer) throws Exception {
-		InputStream cssStream = null;
-		Scanner streamScanner = null;
-		try {
-			cssStream = Map.class.getResourceAsStream("/map.css");
-			streamScanner = new Scanner(cssStream).useDelimiter("\\A");
-			if (streamScanner.hasNext()) {
-				String cssData = streamScanner.next();
-				writer.append(cssData);
-			}
-		} finally {
-			if (streamScanner != null) {
-				streamScanner.close();
-			}
-			if (cssStream != null) {
-				cssStream.close();
-			}
-		}
-	}
-
-	private static void luoJavaskripti() {
-		ScriptWriter scriptWriter = new ScriptWriter("mapFunctions.js");
-		
-		scriptWriter.writeScriptFile();
-	}
-	
 	private static void luoKoostesivu() {
 		FileWriter kirjuri = null;
 		File koostesivu = new File("WorldPage.html");
