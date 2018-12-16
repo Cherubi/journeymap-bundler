@@ -19,7 +19,7 @@ public class ResourceWriter extends FileExpert {
 		try {
 			this.removeFile(file);
 			FileWriter kirjuri = this.addResource(new FileWriter(file));
-			kirjuri.append(this.getScriptFileContent(fileName));
+			kirjuri.append(this.getResourceContent(fileName));
 		} catch (Exception e) {
 			System.out.println("Failed to copy resource " + fileName);
 		} finally {
@@ -30,9 +30,9 @@ public class ResourceWriter extends FileExpert {
 		}
 	}
 
-	private String getScriptFileContent(String resourceName) throws IOException {
-		InputStream cssStream = this.getClass().getResourceAsStream("/" + resourceName);
-		Scanner streamScanner = this.addResource(new Scanner(cssStream)).useDelimiter("\\A");
+	private String getResourceContent(String resourceName) throws IOException {
+		InputStream stream = this.getClass().getResourceAsStream("/" + resourceName);
+		Scanner streamScanner = this.addResource(new Scanner(stream)).useDelimiter("\\A");
 		if (streamScanner.hasNext()) {
 			return streamScanner.next();
 		}

@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 import javax.imageio.ImageIO;
 
@@ -22,7 +23,7 @@ public class MapMerger {
 		}
 	}
 	
-	public void liimaaKartatYhteen(String maailmanNimi, ArrayList<String> kansioidenNimet, int x_min, int x_max, int y_min, int y_max) {
+	public void liimaaKartatYhteen(String maailmanNimi, List<String> kansioidenNimet, int x_min, int x_max, int y_min, int y_max) {
 		varmistaKansionOlemassaolo("MapMerge/" + maailmanNimi + "/");
 		teeTarvittaessaBackUpKansiot(maailmanNimi, kansioidenNimet);
 		if (maailmanNimi.endsWith("_nosnow")) {
@@ -45,7 +46,7 @@ public class MapMerger {
 		teeUudetVarmuuskopiot(maailmanNimi, kansioidenNimet);
 	}
 	
-	private void teeTarvittaessaBackUpKansiot(String maailmanNimi, ArrayList<String> kansioidenNimet) {
+	private void teeTarvittaessaBackUpKansiot(String maailmanNimi, List<String> kansioidenNimet) {
 		varmistaKansionOlemassaolo("MapMerge/" + maailmanNimi + "/MergeMap/");
 		varmistaKansionOlemassaolo("MapMerge/" + maailmanNimi + "/UpdateMap/");
 		int i = 1;
@@ -57,8 +58,8 @@ public class MapMerger {
 		}
 	}
 	
-	private ArrayList<String> luoLumettomatKuvat(String maailmanNimi, ArrayList<String> kansioidenNimet, int x_min, int x_max, int y_min, int y_max) {
-		ArrayList<String> uudetNimet = luoLumettomatKansiot(maailmanNimi, kansioidenNimet);
+	private List<String> luoLumettomatKuvat(String maailmanNimi, List<String> kansioidenNimet, int x_min, int x_max, int y_min, int y_max) {
+		List<String> uudetNimet = luoLumettomatKansiot(maailmanNimi, kansioidenNimet);
 		
 		for (int x = x_min; x <= x_max; x++) {
 			for (int y = y_min; y <= y_max; y++) {
@@ -84,8 +85,8 @@ public class MapMerger {
 		return uudetNimet;
 	}
 	
-	private ArrayList<String> luoLumettomatKansiot(String maailmanNimi, ArrayList<String> kansioidenNimet) {
-		ArrayList<String> uudetNimet = new ArrayList<String>();
+	private List<String> luoLumettomatKansiot(String maailmanNimi, List<String> kansioidenNimet) {
+		List<String> uudetNimet = new ArrayList<String>();
 		varmistaKansionOlemassaolo("MapMerge/" + maailmanNimi + "/new/");
 		
 		for (String kansionimi : kansioidenNimet) {
@@ -149,7 +150,7 @@ public class MapMerger {
 		return false;
 	}
 	
-	private TreeMap<Long, BufferedImage> noudaKarttakuvat(ArrayList<String> kansioidenNimet, int x, int y) {
+	private TreeMap<Long, BufferedImage> noudaKarttakuvat(List<String> kansioidenNimet, int x, int y) {
 		TreeMap<Long, BufferedImage> karttaMap = new TreeMap<Long, BufferedImage>();
 		for (String kansionNimi: kansioidenNimet) {
 			File karttakuva = new File(kansionNimi + x + "." + y + ".png");
@@ -200,7 +201,7 @@ public class MapMerger {
 		return kooste;
 	}
 	
-	private void paivitaKartta(BufferedImage kartta, String maailmanNimi, ArrayList<String> kansioidenNimet, int x, int y) {
+	private void paivitaKartta(BufferedImage kartta, String maailmanNimi, List<String> kansioidenNimet, int x, int y) {
 		BufferedImage paivitys = new BufferedImage(kartta.getWidth(), kartta.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = paivitys.getGraphics();
 		int paivityksia = 0;
@@ -312,7 +313,7 @@ public class MapMerger {
 	}
 	
 	//aina x,y.png -notaatiolla, ei x.y.png
-	private void teeUudetVarmuuskopiot(String maailmanNimi, ArrayList<String> kansioidenNimet) {
+	private void teeUudetVarmuuskopiot(String maailmanNimi, List<String> kansioidenNimet) {
 		try {
 			int n = 1;
 			for (String kansionimi : kansioidenNimet) {
