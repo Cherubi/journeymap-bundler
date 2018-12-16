@@ -60,7 +60,7 @@ public class Map {
 
 	private static WorldDimension etsiUlottuvuudet(WorldConfiguration world) {
 		WorldDimension dimension = new WorldDimension();
-		
+
 		for (String worldDirectory : world.getDirectories()) {
 			File kansio = new File(worldDirectory);
 			etsiUlottuvuudetTiedostosta(kansio, dimension);
@@ -87,7 +87,7 @@ public class Map {
 
 		return dimension;
 	}
-	
+
 	private static void annaKatseluoikeuksia(String kansiopolku) {
 		File kansio = new File(kansiopolku);
 		//kansio.setExecutable(true, false);
@@ -97,18 +97,18 @@ public class Map {
 			}
 		}
 	}
-	
+
 	private static void kirjoitaNettisivu(FileWriter kirjuri, WorldConfiguration world, WorldDimension dimension, ImageCatalog catalog) throws Exception {
 		kirjoitaTiedostonAlku(kirjuri, world);
-		
+
 		kirjoitaKarttaTaulukko(kirjuri, world, dimension, catalog);
-		
+
 		kirjoitaTiedostonLoppu(kirjuri);
 	}
-	
+
 	private static void kirjoitaTiedostonAlku(FileWriter kirjuri, WorldConfiguration world) throws Exception {
 		kirjuri.append("<html>" + "\n\n");
-		
+
 		kirjuri.append("<head>" + "\n");
 		kirjuri.append("<title>" + world.getName() + " Map</title>" + "\n");
 		kirjuri.append("<META charset=utf-8>" + "\n");
@@ -116,41 +116,41 @@ public class Map {
 		// <meta http-equiv="refresh" content="0; url=http://example.com/" />
 		kirjuri.append("<script type=\"text/javascript\" src=\"mapFunctions.js\"></script>\n");
 		kirjuri.append("</head>" + "\n\n");
-		
+
 		kirjuri.append("<body onload=\"maxVisibility()\">" + "\n\n");
-		
+
 		kirjoitaToolsContainer(kirjuri, world);
-		
+
 		kirjuri.append("<table>" + "\n");
 	}
-	
+
 	private static void kirjoitaToolsContainer(FileWriter kirjuri, WorldConfiguration world) throws Exception {
 		kirjuri.append("<div id=\"toolsContainer\">\n");
-		
+
 		kirjoitaButton(kirjuri, "Toggle grid", "ToggleGrid");
-		
+
 		kirjuri.append("<br />" + "\n");
 		kirjoitaButton(kirjuri, "Go to origo", "Origo");
-		
+
 		if (world.getBase() != null) {
 			kirjuri.append("<br />" + "\n");
 			kirjoitaButton(kirjuri, "Go to base", "Base");
 		}
-		
+
 		kirjuri.append("<br />" + "\n");
 		kirjoitaButton(kirjuri, "Toggle prio", "toggleVisibility");
-		
+
 		kirjuri.append("<br />" + "\n");
 		kirjoitaButton(kirjuri, "Reload", "forceReload");
-		
+
 		kirjuri.append("<p id=\"cursor\" style=\"font-size:10px; color:white\"></p>");
 		kirjuri.append("</div>\n\n");
 	}
-	
+
 	private static void kirjoitaButton(FileWriter kirjuri, String teksti, String metodi) throws Exception {
 		kirjuri.append("<input type=\"button\" value=\"" + teksti + "\" onclick=\"" + metodi + "()\"/>" + "\n");
 	}
-	
+
 	private static void kirjoitaKarttaTaulukko(FileWriter kirjuri, WorldConfiguration world, WorldDimension dimension, ImageCatalog catalog) throws Exception {
 		String worldName = world.getName();
 		for (int y = dimension.getMinY(); y <= dimension.getMaxY(); y++) {
@@ -162,26 +162,26 @@ public class Map {
 					kirjuri.append("background=\"" + "MapMerge/" + worldName + "/MergeMap/" + x + "," + y + ".png\" ");
 				}
 				kirjuri.append( "style=\"background-repeat:no-repeat;" + "background-position: center center\">" + "\n");
-				
+
 				kirjuri.append("<div class=\"palanen\" onmousemove=\"getPos(event,this,' " + x + " " + y + "')\" onmouseout=\"stopTracking()\">" + "\n");
-				
+
 				kirjoitaAnchorit(kirjuri, world, x, y);
 				//kirjoitaPaallekaisetKuvat(kirjuri, world, x, y, ".");
 				//kirjoitaPaallekaisetKuvat(kirjuri, world, x, y, ",");
 				kirjoitaPaikat(kirjuri, world, x, y);
-				
+
 				kirjuri.append("</div>" + "\n");
 				kirjuri.append("</td>" + "\n");
 			}
 			kirjuri.append("</tr>" + "\n");
 		}
 	}
-	
+
 	private static void kirjoitaAnchorit(FileWriter kirjuri, WorldConfiguration world, int x, int y) throws Exception {
 		if (x==0 && y==0) {
 			kirjuri.append("<a id=\"origo\" />" + "\n");
 		}
-		
+
 		if (world.getBase() != null) {
 			String baseKoordinaatti = world.getBase();
 			if (baseKoordinaatti.replace( " ", "" ).equals("("+x+","+y+")")) {
@@ -189,10 +189,10 @@ public class Map {
 			}
 		}
 	}
-	
+
 	private static void kirjoitaPaikat(FileWriter kirjuri, WorldConfiguration world, int x, int y) throws Exception {
 		kirjuri.append("<p class=\"paikka prio 1\" style=\"left:0;top:0\">[" + x + "," + y + "]</p>" + "\n");
-		
+
 		for (WorldPlace place : world.getTexts(x, y)) {
 			kirjuri.append(teePaikka(place.getMinorX(), place.getMinorY(), place.getName(), place.getPriority()));
 		}
@@ -201,14 +201,14 @@ public class Map {
 	private static String teePaikka(int x, int y, String nimi, int tarkeysaste) {
 		return "<p class=\"paikka prio" + tarkeysaste + "\" style=\"left:" + x + ";top:" + y + "\">" + nimi + "</p>" + "\n";
 	}
-	
+
 	private static void kirjoitaTiedostonLoppu(FileWriter kirjuri) throws Exception {
 		kirjuri.append("</table>" + "\n");
 		kirjuri.append("</body>" + "\n\n");
-		
+
 		kirjuri.append("</html>");
 	}
-	
+
 	private static void luoCSS() {
 		new ResourceWriter("map.css").copyResourceFile();
 	}
@@ -246,7 +246,7 @@ public class Map {
 		File koostesivu = new File("WorldPage.html");
 		try {
 			poistaTiedosto(koostesivu);
-			
+
 			kirjuri = new FileWriter(koostesivu);
 			kirjoitaKoostesivu(kirjuri, worlds);
 		} catch (Exception e) {
@@ -259,7 +259,7 @@ public class Map {
 			} catch (Exception e) {}
 		}
 	}
-	
+
 	private static void kirjoitaKoostesivu(FileWriter kirjuri, List<WorldConfiguration> worlds) throws Exception {
 		kirjuri.append("<html>" + "\n");
 		kirjuri.append("<head>" + "\n");
@@ -268,7 +268,7 @@ public class Map {
 		kirjuri.append("<link rel=\"stylesheet\" href=\"map.css\" type=\"text/css\" media=\"screen, print\" />" + "\n");
 		kirjuri.append("<base target=f2>");
 		kirjuri.append("</head>" + "\n\n");
-		
+
 		kirjuri.append("<body>" + "\n");
 		kirjuri.append("<h2>Minecraft Maps</h2>" + "\n");
 		for (WorldConfiguration world : worlds) {
@@ -280,17 +280,17 @@ public class Map {
 			}
 			kirjuri.append("</p>" + "\n");
 		}
-		
+
 		kirjuri.append("</body>" + "\n\n");
 		kirjuri.append("</html>");
 	}
-	
+
 	private static void luoIndexsivu() {
 		FileWriter kirjuri = null;
 		File indexsivu = new File("index.html");
 		try {
 			poistaTiedosto(indexsivu);
-			
+
 			kirjuri = new FileWriter(indexsivu);
 			kirjoitaIndexsivu(kirjuri);
 		} catch (Exception e) {
@@ -303,7 +303,7 @@ public class Map {
 			} catch (Exception e) {}
 		}
 	}
-	
+
 	private static void kirjoitaIndexsivu(FileWriter kirjuri) throws Exception {
 		kirjuri.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">"+ "\n");
 		kirjuri.append("<html xmlns=\"http://www.w3.org/1999/xhtml\">" + "\n");
@@ -311,13 +311,13 @@ public class Map {
 		kirjuri.append("<title>Minecraft Maps</title>" + "\n");
 		kirjuri.append("<META charset=\"utf-8\">" + "\n");
 		kirjuri.append("</head>" + "\n\n");
-		
+
 		kirjuri.append("<frameset cols=\"20%,80%\">" + "\n");
 		kirjuri.append("<frame src=\"WorldPage.html\" NAME=f1>" + "\n");
 		kirjuri.append("<frame src=\"javascript:parent.blank()\" NAME=f2>" + "\n");
 		kirjuri.append("<noframes>Sorry, your browser doesn't handle frames.</noframes>" + "\n");
 		kirjuri.append("</frameset>" + "\n");
-		
+
 		kirjuri.append("<body />" + "\n\n");
 		kirjuri.append("</html>");
 	}

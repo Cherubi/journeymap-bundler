@@ -86,7 +86,7 @@ public class ConfigurationManager {
 			return annettuOsoite;
 		}
 	}
-	
+
 	private void alustaTiedostotiedot() {
 		if (JOptionPane.showConfirmDialog(null, "Do you want to input your world files?", "Minecraft Maps", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			String worldName = JOptionPane.showInputDialog("Decide world name (map id):");
