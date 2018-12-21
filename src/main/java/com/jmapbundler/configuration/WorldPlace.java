@@ -20,6 +20,14 @@ public class WorldPlace {
 		this.priority = priority;
 	}
 
+	public int getMajorX() {
+		return this.majorX;
+	}
+
+	public int getMajorY() {
+		return this.majorY;
+	}
+
 	public int getMinorX() {
 		return this.minorX;
 	}

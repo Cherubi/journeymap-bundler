@@ -22,9 +22,16 @@
 	position:fixed;
 	top:5px;
 	right:5px;
-	border:1px solid #4C4646;
-	background:black;
+	background:rgba(0,0,0,0);
 	z-index:110;
+	width: 20em;
+}
+
+#cursor {
+	background: rgba(0,0,0,0.5);
+	border: 2px solid white;
+	border-radius: 5px;
+	padding: 0.7em;
 }
 
 body {
@@ -43,4 +50,13 @@ td {
 	color:#2F4F4F;
 	font-family:"Trebuchet MS", Helvetica, sans-serif;
 	font-size:10px;
+}
+
+input, select {
+	background: black;
+	color: white;
+	width:100%;
+	padding: 0.7em;
+	border-radius: 5px;
+	margin-bottom: 0.2em;
 }

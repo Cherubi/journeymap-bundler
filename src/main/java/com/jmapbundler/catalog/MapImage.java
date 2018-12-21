@@ -1,6 +1,6 @@
 package com.jmapbundler.catalog;
 
-public class MapImage {
+public class MapImage implements Jsonable {
 
 	private final String mapName;
 	private final Integer x;
@@ -12,6 +12,7 @@ public class MapImage {
 		this.y = y;
 	}
 
+	@Override
 	public String toJSON() {
 		return "{name:'" + this.mapName + "',x:" + this.x + ",y:" + this.y + "}";
 	}

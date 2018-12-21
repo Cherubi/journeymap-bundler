@@ -9,12 +9,19 @@ import java.util.Scanner;
 public class ResourceWriter extends FileExpert {
 
 	private final String fileName;
+	private final String data;
 
-	public ResourceWriter(String scriptName) {
-		this.fileName = scriptName;
+	public ResourceWriter(String fileName, String data) {
+		this.fileName = fileName;
+		this.data = data;
 	}
 
-	public void copyResourceFile() {
+	public ResourceWriter(String fileName) {
+		this.fileName = fileName;
+		this.data = null;
+	}
+
+	public void writeFile() {
 		File file = new File(fileName);
 		try {
 			this.removeFile(file);
@@ -31,6 +38,10 @@ public class ResourceWriter extends FileExpert {
 	}
 
 	private String getResourceContent(String resourceName) throws IOException {
+		if (this.data != null) {
+			return this.data;
+		}
+
 		InputStream stream = this.getClass().getResourceAsStream("/" + resourceName);
 		Scanner streamScanner = this.addResource(new Scanner(stream)).useDelimiter("\\A");
 		if (streamScanner.hasNext()) {
