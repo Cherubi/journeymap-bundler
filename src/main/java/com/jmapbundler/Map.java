@@ -1,15 +1,25 @@
 package com.jmapbundler;
 
 import java.io.File;
+import java.io.PrintStream;
 
 import com.jmapbundler.catalog.ImageList;
 import com.jmapbundler.catalog.PlaceList;
 import com.jmapbundler.configuration.*;
+import com.jmapbundler.console.Console;
 
 public class Map {
 
 	public static void main(String[] args) {
-		generateMaps();
+		final Console console = new Console();
+		PrintStream ps = console.getPrintStream();
+		System.setOut(ps);
+		System.setErr(ps);
+		try {
+			generateMaps();
+		} catch (Exception e) {
+			e.printStackTrace(ps);
+		}
 	}
 
 	private static void generateMaps() {
