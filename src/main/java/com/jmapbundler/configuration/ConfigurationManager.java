@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 
@@ -155,7 +157,12 @@ public class ConfigurationManager {
 					priority = Integer.parseInt(rivi);
 				}
 				else {
-					world.addText(x, y, Integer.parseInt(osat[0]), Integer.parseInt(osat[1]), osat[2], priority);
+					final String name = Arrays
+							.asList(osat)
+							.subList(2, osat.length)
+							.stream()
+							.collect(Collectors.joining(" "));
+					world.addText(x, y, Integer.parseInt(osat[0]), Integer.parseInt(osat[1]), name, priority);
 				}
 			}
 		} catch (FileNotFoundException ffe) {
