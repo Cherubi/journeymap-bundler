@@ -1,0 +1,93 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Map viewer</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="map.css" type="text/css" media="screen, print" />
+		<script type="text/javascript" src="mapFunctions.js"></script>
+		<script src="images.js"></script>
+		<script src="places.js"></script>
+		<script type="text/javascript">
+			function getMapNames() {
+				const names = {};
+				images.forEach((image) => names[image.name] = true);
+				return Object.keys(names);
+			}
+			function writeMap(name) {
+				console.log('Writing map...')
+				const selectedImages = images.filter((image) => image.name == name);
+				const selectedPlaces = places.filter((place) => place.world == name);
+				const xValues = selectedImages.map((image) => image.x);
+				const yValues = selectedImages.map((image) => image.y);
+				const [minX, minY] = [xValues, yValues].map((v) => Math.min(...v));
+				const [maxX, maxY] = [xValues, yValues].map((v) => Math.max(...v));
+
+				let innerHTML = '<table>';
+				for (let y = minY; y <= maxY; y += 1) {
+					innerHTML += '<tr>'
+					for (let x = minX; x <= maxX; x += 1) {
+						const hasImage = selectedImages.some((image) => image.x == x && image.y == y);
+						const placesHTML = selectedPlaces
+								.filter((place) => place.majorX == x && place.majorY == y)
+								.map((place) => '<p class="paikka prio' + place.priority + '" '
+										+ 'style="left:' + place.minorX + ';'
+										+ 'top:' + place.minorY + '">' + place.name + '</p>');
+						innerHTML += '<td '
+								+ (hasImage ? 'background="./MapMerge/' + name + '/MergeMap/' + x + ',' + y + '.png" ' : '')
+								+ 'style="background-repeat:no-repeat;background-position: center center">'
+								+ '<div class="palanen" onmousemove="getPos(event,this,\' ' + x + ' ' + y + '\')" onmouseout="stopTracking()">'
+								+ '<p class="paikka prio1" style="left:0;top:0">[' + x + ',' + y + ']</p>'
+								+ placesHTML
+								+ '</div>'
+								+ '</td>';
+					}
+					innerHTML += '</tr>'
+				}
+				innerHTML += '</table>';
+
+				const container = document.getElementById('map-container');
+				container.innerHTML = innerHTML;
+				collapseGrid();
+			}
+			function worldSelectionChanged() {
+				const worldSelection = document.getElementById('world-selection');
+				const selected = worldSelection.getElementsByTagName('option')[worldSelection.selectedIndex];
+				writeMap(selected.value);
+			}
+			function initialize() {
+				const mapNames = getMapNames();
+				const worldSelectionContainer = document.getElementById('world-selection-container');
+				if (mapNames.length <= 1) {
+					worldSelectionContainer.style.display = 'none';
+				} else {
+					const worldSelection = document.getElementById('world-selection');
+					for (const name of mapNames) {
+						const option = document.createElement('option');
+						option.innerText = name;
+						option.value = name;
+						worldSelection.appendChild(option);
+					}
+				}
+				writeMap(mapNames[0]);
+			}
+		</script>
+	</head>
+	<body onload="initialize()">
+		<div id="toolsContainer">
+			<input type="button" value="Toggle grid" onclick="toggleGrid()"/>
+			<br />
+			<input type="button" value="Go to origo" onclick="Origo()"/>
+			<br />
+			<input type="button" value="Toggle prio" onclick="toggleVisibility()"/>
+			<br />
+			<input type="button" value="Reload" onclick="forceReload()"/>
+			<div id="world-selection-container">
+				<select id="world-selection" onchange="worldSelectionChanged()">
+				</select>
+			</div>
+			<p id="cursor" style="font-size:10px; color:white"></p>
+		</div>
+		<div id="map-container"></div>
+	</body>
+</html>

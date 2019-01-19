@@ -1,37 +1,42 @@
-function ToggleGrid() {
-	var sheet = document.getElementsByTagName("table")[0];
-	if (sheet.style.borderCollapse == "collapse") {
-		sheet.style.borderCollapse = "initial";
+function toggleGrid() {
+	const sheet = document.getElementsByTagName('table')[0];
+	if (sheet.style.borderCollapse == 'collapse') {
+		sheet.style.borderCollapse = 'initial';
 	}
 	else {
-		sheet.style.borderCollapse = "collapse";
+		sheet.style.borderCollapse = 'collapse';
 	}
+}
+
+function collapseGrid() {
+	const sheet = document.getElementsByTagName('table')[0];
+	sheet.style.borderCollapse = 'collapse';
 }
 
 var showPlaces = true;
 
-function ToggleNames() {
-	var nameTexts = document.getElementsByClassName("paikka");
+function toggleNames() {
+	var nameTexts = document.getElementsByClassName('paikka');
 	if (!showPlaces) {
 		for (i = 0; i < nameTexts.length; i++) {
-			nameTexts[i].style.display = "block";
+			nameTexts[i].style.display = 'block';
 		}
 		showPlaces = true;
 	}
 	else {
 		for (i = 0; i < nameTexts.length; i++) {
-			nameTexts[i].style.display = "none";
+			nameTexts[i].style.display = 'none';
 		}
 		showPlaces = false;
 	}
 }
 
 function Origo() {
-	window.location.replace(window.location.pathname + "#origo");
+	window.location.replace(window.location.pathname + '#origo');
 }
 
 function Base() {
-	window.location.replace(window.location.pathname + "#base");
+	window.location.replace(window.location.pathname + '#base');
 }
 
 var prioVisibility = 1;
@@ -39,7 +44,7 @@ var prioMax = 3;
 
 function maxVisibility() {
 	prioMax = 1;
-	var paikat = document.getElementsByClassName("paikka");
+	var paikat = document.getElementsByClassName('paikka');
 	for (i = 0; i < paikat.length; i++) {
 		var prioriteetti = etsiPrioriteetti(paikat[i]);
 		if (prioriteetti > prioMax) {
@@ -59,7 +64,7 @@ function toggleVisibility() {
 }
 
 function setVisibility() {
-	var paikat = document.getElementsByClassName("paikka");
+	var paikat = document.getElementsByClassName('paikka');
 	for (i = 0; i < paikat.length; i++) {
 		var prioriteetti = etsiPrioriteetti(paikat[i]);
 		if (prioriteetti <= prioVisibility) {
@@ -73,8 +78,8 @@ function setVisibility() {
 function etsiPrioriteetti(paikka) {
 	var classLista = paikka.classList;
 	for (j = 0; j < classLista.length; j++) {
-		if (classLista[j].indexOf("prio") == 0) {
-			foundPrio = parseInt(classLista[j].replace("prio", ""));
+		if (classLista[j].indexOf('prio') == 0) {
+			foundPrio = parseInt(classLista[j].replace('prio', ''));
 			if (isNaN(foundPrio) == false) {
 				return foundPrio;
 			}
@@ -94,10 +99,14 @@ function getPos(e, div, grid) {
 	scrollY = document.body.getBoundingClientRect().top;
 	divX = div.offsetLeft;
 	divY = div.offsetTop;
-	cursor = grid + " (" + Math.round(-scrollX + x - divX) + ", " + Math.round(-scrollY + y - divY) + ")";
-	document.getElementById("cursor").innerHTML = cursor;
+	cursor = grid + ' (' + Math.round(-scrollX + x - divX) + ', ' + Math.round(-scrollY + y - divY) + ')';
+	const cursorElement = document.getElementById('cursor');
+	cursorElement.innerHTML = cursor;
+	cursorElement.style.visibility = 'visible';
 }
 
 function stopTracking() {
-	document.getElementById("cursor").innerHTML = "";
+	const cursorElement = document.getElementById('cursor');
+	cursorElement.innerHTML = '';
+	cursorElement.style.visibility = 'hidden';
 }
