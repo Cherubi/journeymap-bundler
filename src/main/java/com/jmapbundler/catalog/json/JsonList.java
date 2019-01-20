@@ -1,12 +1,16 @@
-package com.jmapbundler.catalog;
+package com.jmapbundler.catalog.json;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class JsonList implements Jsonable {
+public class JsonList implements Jsonable {
 
 	private List<Jsonable> items = new ArrayList<>();
+
+	public JsonList(Jsonable ...items) {
+		this.add(items);
+	}
 
 	protected void add(Jsonable ...items) {
 		for (Jsonable item : items) {

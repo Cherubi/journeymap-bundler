@@ -2,6 +2,7 @@ package com.jmapbundler.catalog;
 
 import java.util.List;
 
+import com.jmapbundler.catalog.json.*;
 import com.jmapbundler.configuration.WorldPlace;
 
 public class PlaceList extends JsonList implements Jsonable {

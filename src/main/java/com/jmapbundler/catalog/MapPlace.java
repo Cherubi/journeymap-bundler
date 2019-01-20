@@ -1,5 +1,6 @@
 package com.jmapbundler.catalog;
 
+import com.jmapbundler.catalog.json.*;
 import com.jmapbundler.configuration.WorldPlace;
 
 public class MapPlace implements Jsonable {
@@ -14,13 +15,15 @@ public class MapPlace implements Jsonable {
 
 	@Override
 	public String toJSON() {
-		return "{world:'" + this.mapName + "',"
-				+ "majorX:" + this.place.getMajorX() + ","
-				+ "majorY:" + this.place.getMajorY() + ","
-				+ "minorX:" + this.place.getMinorX() + ","
-				+ "minorY:" + this.place.getMinorY() + ","
-				+ "priority:" + this.place.getPriority() + ","
-				+ "name:'" + this.place.getName() + "'}";
+		return new JsonObject()
+				.addField("world", this.mapName)
+				.addField("majorX", this.place.getMajorX())
+				.addField("majorY", this.place.getMajorY())
+				.addField("minorX", this.place.getMinorX())
+				.addField("minorY", this.place.getMinorY())
+				.addField("priority", this.place.getPriority())
+				.addField("name", this.place.getName())
+				.toJSON();
 	}
 
 }

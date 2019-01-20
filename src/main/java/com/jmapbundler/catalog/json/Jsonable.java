@@ -1,4 +1,4 @@
-package com.jmapbundler.catalog;
+package com.jmapbundler.catalog.json;
 
 public interface Jsonable {
 
